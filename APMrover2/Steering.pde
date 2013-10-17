@@ -81,6 +81,13 @@ static void calc_throttle(float target_speed)
         return;
     }
 
+    // clay added this for explicit control over throttle using RC line 2
+    // maybe this is redundant with auto_check_trigger, but give it a shot
+    if (ch2_flag) {
+        channel_throttle->servo_out = g.throttle_min.get();
+        return;
+    }
+
     int throttle_target = g.throttle_cruise + throttle_nudge;  
 
     /*

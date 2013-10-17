@@ -107,3 +107,19 @@ static void read_trim_switch()
     }
 }
 
+
+// clay added this, based on code above
+// read at 10 hz
+// set this to your gigantic override / GPIO switch
+#define CH_2_DISABLE_TRIGGER 1800
+
+static void read_override_switch()
+{
+    if (RC_Channel::rc_channel(1)->read() > CH_2_DISABLE_TRIGGER) {
+        // switch is engaged
+        ch2_flag = true;
+    } else { // switch is disengaged
+        ch2_flag = false;
+    }
+}
+

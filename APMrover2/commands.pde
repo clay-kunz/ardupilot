@@ -123,6 +123,13 @@ static void set_next_WP(const struct Location *wp)
 	// this is handy for the groundstation
 	wp_totalDistance 	= get_distance(current_loc, next_WP);
 	wp_distance 		= wp_totalDistance;
+
+
+    // clay copied this from ArduCopter/commands_logic.pde
+    // this will be used to remember the time in millis after we reach or pass the WP.
+    loiter_time     = 0;
+    // this is the delay, stored in seconds
+    loiter_time_max = wp->p1;  // copy delay from waypoint
 }
 
 static void set_guided_WP(void)

@@ -431,6 +431,13 @@ static bool auto_triggered;
 static float 	ground_speed = 0;
 static int16_t throttle_last = 0, throttle = 500;
 
+// next two parameters copied by Clay from ArduCopter code for supporting
+//  loitering at a waypoint before rushing off to the next one.
+// How long we should stay in Loiter Mode for mission scripting (time in seconds)
+static uint16_t loiter_time_max;
+// How long have we been loitering - The start time in millis
+static uint32_t loiter_time;
+
 ////////////////////////////////////////////////////////////////////////////////
 // CH7 control
 ////////////////////////////////////////////////////////////////////////////////
@@ -442,6 +449,9 @@ static bool ch7_flag;
 // This register tracks the current Mission Command index when writing
 // a mission using CH7 in flight
 static int8_t CH7_wp_index;
+
+// CH2 override switch
+static bool ch2_flag;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Battery Sensors
@@ -562,6 +572,7 @@ static const AP_Scheduler::Task scheduler_tasks[] PROGMEM = {
     { read_battery,           5,   1000 },
     { read_receiver_rssi,     5,   1000 },
     { read_trim_switch,       5,   1000 },
+    { read_override_switch,  15,   1000 },
     { read_control_switch,   15,   1000 },
     { update_events,         15,   1000 },
     { check_usb_mux,         15,   1000 },

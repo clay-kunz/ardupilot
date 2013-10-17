@@ -211,11 +211,12 @@ static bool verify_takeoff()
 
 static bool verify_nav_wp()
 {
+    bool arrived = false;
     if ((wp_distance > 0) && (wp_distance <= g.waypoint_radius)) {
         gcs_send_text_fmt(PSTR("Reached Waypoint #%i dist %um"),
                           (unsigned)nav_command_index,
                           (unsigned)get_distance(current_loc, next_WP));
-        return true;
+        arrived = true;
     }
 
     // have we gone past the waypoint?
@@ -223,9 +224,16 @@ static bool verify_nav_wp()
         gcs_send_text_fmt(PSTR("Passed Waypoint #%i dist %um"),
                           (unsigned)nav_command_index,
                           (unsigned)get_distance(current_loc, next_WP));
-        return true;
+        arrived = true;
     }
 
+    if (!arrived)
+        return false;
+
+    if (loiter_time == 0)
+        loiter_time = millis();
+    if (((millis() - loiter_time) / 1000) >= loiter_time_max)
+        return true;
     return false;
 }
 

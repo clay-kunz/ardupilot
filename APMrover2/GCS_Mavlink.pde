@@ -1240,6 +1240,11 @@ void GCS_MAVLINK::handleMessage(mavlink_message_t* msg)
 					param1 = tell_command.lat;
 					break;
 
+                    // clay added this - copied from ArduCopter
+                case MAV_CMD_NAV_WAYPOINT:
+                    param1 = tell_command.p1;
+                    break;
+
 				case MAV_CMD_DO_JUMP:
 					param2 = tell_command.lat;
 					param1 = tell_command.p1;
@@ -1505,6 +1510,7 @@ void GCS_MAVLINK::handleMessage(mavlink_message_t* msg)
             switch (tell_command.id) {                    // Switch to map APM command fields inot MAVLink command fields
             case MAV_CMD_NAV_WAYPOINT:
             case MAV_CMD_NAV_RETURN_TO_LAUNCH:
+                tell_command.p1 = packet.param1;
                 break;
 
             case MAV_CMD_NAV_TAKEOFF:
